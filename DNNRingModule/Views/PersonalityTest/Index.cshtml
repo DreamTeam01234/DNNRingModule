@@ -8,17 +8,50 @@
 
 @{
     var user = UserController.Instance.GetCurrentUserInfo();
+    bool isLoggedIn = user != null && user.UserID > 0;
 }
 
-<h2>Welcome to the Personality Test</h2>
-
-@if (user != null && user.UserID > 0)
+@if (isLoggedIn)
 {
     <p>Hello, @user.DisplayName!</p>
 }
 else
 {
-    <p>Please log in to take the test.</p>
+    <p>⚠️Fontos: A tesztet csak regisztrált és bejelentkezett felhasználóink tölthetik ki, hogy személyre szabott ajánlást és kuponkódot tudjunk biztosítani számodra. Lépj be a fiókodba, vagy regisztrálj most, és indulhat a kaland!</p>
 }
+
+<h2>💍 Fedezd fel a hozzád illő gyűrűt!</h2>
+<p>Személyiségtesztünkkel segítünk megtalálni a stílusodhoz és életmódodhoz legjobban illő gyűrűt. Válaszolj néhány egyszerű kérdésre, és mi megmutatjuk, mely darabok tükrözik legjobban az egyéniséged!</p>
+
+
+<div style="margin-top: 20px;">
+    @if (isLoggedIn)
+    {
+        <form method="get" action="/TestStart">
+            <button type="submit" class="btn btn-primary btn-lg">Kezdjünk!</button>
+        </form>
+    }
+    else
+    {
+        <button id="customLoginTrigger" class="btn btn-primary btn-lg">Bejelentkezek</button>
+    }
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const loginBtn = document.getElementById("customLoginTrigger");
+        if (loginBtn) {
+            loginBtn.addEventListener("click", function (e) {
+                e.preventDefault();
+                const headerLogin = document.querySelector('.LoginLink');
+                if (headerLogin) {
+                    headerLogin.click();
+                } else {
+                    alert("Kérlek használd a fenti 'Bejelentkezés' menüpontot.");
+                }
+            });
+        }
+    });
+</script>
 
 

@@ -150,6 +150,7 @@
     </Content>
     <Content Include="Views\Settings\Settings.cshtml" />
     <Content Include="Views\PersonalityTest\Index.cshtml" />
+    <Content Include="Views\PersonalityTest\TestStart.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
