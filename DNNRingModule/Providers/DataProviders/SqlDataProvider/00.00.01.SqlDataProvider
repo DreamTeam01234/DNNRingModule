@@ -17,7 +17,6 @@ CREATE TABLE {databaseOwner}{objectQualifier}PersonalityTest
     Id INT IDENTITY(1,1) PRIMARY KEY,
     FilledOutBy INT NOT NULL,
     FilledOutAt DATETIME NOT NULL DEFAULT GETDATE(),
-
     Answer1 NVARCHAR(10),
     Answer2 NVARCHAR(10),
     Answer3 NVARCHAR(10),
@@ -27,9 +26,8 @@ CREATE TABLE {databaseOwner}{objectQualifier}PersonalityTest
     Answer7 NVARCHAR(10),
     Answer8 NVARCHAR(10),
     Answer9 NVARCHAR(10),
-    Answer10 NVARCHAR(10),
+    Answer10 NVARCHAR(10)
     )  ON [PRIMARY]
-     TEXTIMAGE_ON [PRIMARY]
 GO
 
 
