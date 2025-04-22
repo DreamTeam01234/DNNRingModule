@@ -8,33 +8,30 @@
 /*****                                                  *****/
 /************************************************************/
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DNNRingModule_Items]') AND type in (N'U'))
-DROP TABLE {databaseOwner}[{objectQualifier}DNNRingModule_Items]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}PersonalityTest]') AND type in (N'U'))
+DROP TABLE {databaseOwner}[{objectQualifier}PersonalityTest]
 GO
 
-CREATE TABLE {databaseOwner}{objectQualifier}DNNRingModule_Items
+CREATE TABLE {databaseOwner}{objectQualifier}PersonalityTest
     (
-    ItemId int NOT NULL IDENTITY (1, 1),
-    ItemName nvarchar(MAX) NOT NULL,
-    ItemDescription nvarchar(MAX) NOT NULL,
-    AssignedUserId int NULL,
-    ModuleId int NOT NULL,
-    CreatedOnDate datetime NOT NULL,
-    CreatedByUserId int NOT NULL,
-    LastModifiedOnDate datetime NOT NULL,
-    LastModifiedByUserId int NOT NULL
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    FilledOutBy INT NOT NULL,
+    FilledOutAt DATETIME NOT NULL DEFAULT GETDATE(),
+
+    Answer1 NVARCHAR(10),
+    Answer2 NVARCHAR(10),
+    Answer3 NVARCHAR(10),
+    Answer4 NVARCHAR(10),
+    Answer5 NVARCHAR(10),
+    Answer6 NVARCHAR(10),
+    Answer7 NVARCHAR(10),
+    Answer8 NVARCHAR(10),
+    Answer9 NVARCHAR(10),
+    Answer10 NVARCHAR(10),
     )  ON [PRIMARY]
      TEXTIMAGE_ON [PRIMARY]
 GO
 
-
-ALTER TABLE {databaseOwner}{objectQualifier}DNNRingModule_Items ADD CONSTRAINT
-    PK_{objectQualifier}DNNRingModule_Items PRIMARY KEY CLUSTERED 
-    (
-    ItemId
-    ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-
-GO
 
 
 /************************************************************/
