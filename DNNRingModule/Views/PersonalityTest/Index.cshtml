@@ -1,5 +1,4 @@
 ﻿@inherits DotNetNuke.Web.Mvc.Framework.DnnWebViewPage
-
 @using DotNetNuke.Web.Client.ClientResourceManagement
 @using DotNetNuke.Framework.JavaScriptLibraries
 @using DotNetNuke.Entities.Users
@@ -7,8 +6,8 @@
 @using DotNetNuke.Web.Mvc.Helpers
 
 @{
-    var user = UserController.Instance.GetCurrentUserInfo();
-    bool isLoggedIn = user != null && user.UserID > 0;
+    var user = ViewBag.User as UserInfo;
+    bool isLoggedIn = ViewBag.IsLoggedIn;
 }
 
 @if (isLoggedIn)
@@ -23,19 +22,14 @@ else
 <h2>💍 Fedezd fel a hozzád illő gyűrűt!</h2>
 <p>Személyiségtesztünkkel segítünk megtalálni a stílusodhoz és életmódodhoz legjobban illő gyűrűt. Válaszolj néhány egyszerű kérdésre, és mi megmutatjuk, mely darabok tükrözik legjobban az egyéniséged!</p>
 
-
-<div style="margin-top: 20px;">
-    @if (isLoggedIn)
-    {
-        <form method="get" action="/TestStart">
-            <button type="submit" class="btn btn-primary btn-lg">Kezdjünk!</button>
-        </form>
-    }
-    else
-    {
-        <button id="customLoginTrigger" class="btn btn-primary btn-lg">Bejelentkezek</button>
-    }
-</div>
+@if (isLoggedIn)
+{
+    <a href="@Url.Action("TestStart", "PersonalityTest", new { ctl = "TestStart" })" class="btn btn-primary btn-lg">Kezdjünk!</a>
+}
+else
+{
+    <button id="customLoginTrigger" class="btn btn-primary btn-lg">Bejelentkezek</button>
+}
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -53,5 +47,3 @@ else
         }
     });
 </script>
-
-

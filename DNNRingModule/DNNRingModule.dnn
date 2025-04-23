@@ -60,6 +60,16 @@
                     <helpUrl />
                     <viewOrder>0</viewOrder>
                   </moduleControl>
+					<moduleControl>
+						<controlKey>TestStart</controlKey>
+						<controlSrc>Ring.Module.DNNRingModule.Controllers/PersonalityTest/TestStart.mvc</controlSrc>
+						<supportsPartialRendering>False</supportsPartialRendering>
+						<controlTitle />
+						<controlType>View</controlType>
+						<iconFile />
+						<helpUrl />
+						<viewOrder>1</viewOrder>
+					</moduleControl>
                   <moduleControl>
                     <controlKey>Settings</controlKey>
                     <controlSrc>Ring.Module.DNNRingModule.Controllers/Settings/Settings.mvc</controlSrc>

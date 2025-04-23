@@ -14,7 +14,15 @@ namespace Ring.Module.DNNRingModule.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.User = UserController.Instance.GetCurrentUserInfo();
+            ViewBag.IsLoggedIn = ViewBag.User != null && ViewBag.User.UserID > 0;
+
+            return View();
+        }
+        public ActionResult TestStart()
+        {
             return View();
         }
     }
 }
+
