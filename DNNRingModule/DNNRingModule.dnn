@@ -61,14 +61,14 @@
                     <viewOrder>0</viewOrder>
                   </moduleControl>
 					<moduleControl>
-						<controlKey>TestStart</controlKey>
-						<controlSrc>Ring.Module.DNNRingModule.Controllers/PersonalityTest/TestStart.mvc</controlSrc>
+						<controlKey>ThankYou</controlKey>
+						<controlSrc>Ring.Module.DNNRingModule.Controllers/PersonalityTest/ThankYou.mvc</controlSrc>
 						<supportsPartialRendering>False</supportsPartialRendering>
 						<controlTitle />
 						<controlType>View</controlType>
 						<iconFile />
 						<helpUrl />
-						<viewOrder>1</viewOrder>
+						<viewOrder>0</viewOrder>
 					</moduleControl>
                   <moduleControl>
                     <controlKey>Settings</controlKey>
