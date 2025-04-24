@@ -6,6 +6,7 @@
 @using DotNetNuke.Web.Mvc.Helpers
 
 @{
+    ClientResourceManager.RegisterScript(Dnn.DnnPage, "~/DesktopModules/MVC/DNNRingModule/Scripts/personalityTest.js");
     int step = ViewBag.Step ?? 0;
     var user = ViewBag.User as UserInfo;
     bool isLoggedIn = ViewBag.IsLoggedIn ?? false;
@@ -34,7 +35,7 @@ else
     if (step == 1)
     {
         <form method="post" action="@Url.Action("Index", "PersonalityTest")">
-            <input type="hidden" name="step" value="@step" />
+            <input type="hidden" name="step" value="1" />
             <p>1. Mi alapján választod meg az öltözködésedet?</p>
             <label><input type="radio" name="q1" value="A" /> A) Legyen karakteres és tükrözze, hogy céltudatos vagyok</label><br />
             <label><input type="radio" name="q1" value="B" /> B) Letisztult, modern stílust keresek</label><br />
@@ -112,58 +113,17 @@ else
         </form>
     }
 }
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // ÁTIRÁNYÍTÁS A BEJELENTKEZÉSI OLDALRA
-        const loginBtn = document.getElementById("customLoginTrigger");
-        if (loginBtn) {
-            loginBtn.addEventListener("click", function (e) {
-                e.preventDefault();
-                const headerLogin = document.querySelector('.LoginLink');
-                if (headerLogin) {
-                    headerLogin.click();
-                } else {
-                    alert("Kérlek használd a fenti 'Bejelentkezés' menüpontot.");
+        const savedAnswers = @Html.Raw(Json.Encode(ViewBag.Answers));
+
+        if (savedAnswers) {
+            for (const [key, value] of Object.entries(savedAnswers)) {
+                const radio = document.querySelector(`input[name="${key}"][value="${value}"]`);
+                if (radio) {
+                    radio.checked = true;
                 }
-            });
+            }
         }
-
-        // A RADIO-GOMBOS FORMOKNÁL MINDEN KÉRDÉSRE VAN VÁLASZ?
-        const forms = document.querySelectorAll('form[action*="PersonalityTest"]');
-        forms.forEach(form => {
-            form.addEventListener("submit", function (e) {
-                // A VISSZA GOMBOT NEM KELL VALIDÁLNI
-                if (form.querySelector('button[type="submit"]').textContent === "⬅️ Vissza") {
-                    return;
-                }
-
-                const radios = form.querySelectorAll('input[type="radio"]');
-                const questionNames = new Set([...radios].map(r => r.name));
-                let isValid = true;
-
-                const errorMessage = form.querySelector('.error-message');
-                if (errorMessage) {
-                    errorMessage.remove();
-                }
-
-                questionNames.forEach(name => {
-                    const selectedAnswer = form.querySelector(`input[name="${name}"]:checked`);
-                    if (!selectedAnswer) {
-                        isValid = false;
-                    }
-                });
-                if (!isValid) {
-                    e.preventDefault();
-                    const errorText = document.createElement('span');
-                    //EZT MAJD CSS-BEN
-                    errorText.className = 'error-message';
-                    errorText.style.color = 'red';
-                    errorText.style.fontSize = '14px';
-                    errorText.textContent = 'Kérlek válaszolj minden kérdésre a folytatáshoz!';
-                    form.querySelector('button[type="submit"]').after(errorText);
-                }
-            });
-        });
     });
 </script>

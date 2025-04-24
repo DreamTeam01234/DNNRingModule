@@ -107,6 +107,7 @@
       <DependentUpon>Settings.resx</DependentUpon>
     </Compile>
     <Compile Include="Components\FeatureController.cs" />
+    <Compile Include="Components\PersonalityTestManager.cs" />
     <Compile Include="Controllers\PersonalityTestController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Models\PersonalityTest.cs" />
@@ -143,6 +144,7 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\personalityTest.js" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
