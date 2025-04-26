@@ -58,9 +58,9 @@ namespace Ring.Module.DNNRingModule.Controllers
                 };
             }
 
+            // VISSZA
             if (step == 0)
             {
-                // Vissza
                 answers.Answer6 = form["q6"];
                 answers.Answer7 = form["q7"];
                 answers.Answer8 = form["q8"];
@@ -83,7 +83,7 @@ namespace Ring.Module.DNNRingModule.Controllers
                 answers.Answer9 = form["q9"];
                 answers.Answer10 = form["q10"];
             }
-            
+
             Session["PersonalityTestAnswers"] = answers;
 
             if (step == 2)
@@ -104,6 +104,22 @@ namespace Ring.Module.DNNRingModule.Controllers
 
         public ActionResult ThankYou()
         {
+            var answers = Session["PersonalityTestAnswers"] as PersonalityTestAnswer;
+            //Ilyen dictionary-ben kell tárolni a vlaszokat, hogy a ThankYou oldalon könnyen lehessen kiiratni
+            ViewBag.Answers = new Dictionary<string, string>
+            {
+                { "q1", answers?.Answer1 },
+                { "q2", answers?.Answer2 },
+                { "q3", answers?.Answer3 },
+                { "q4", answers?.Answer4 },
+                { "q5", answers?.Answer5 },
+                { "q6", answers?.Answer6 },
+                { "q7", answers?.Answer7 },
+                { "q8", answers?.Answer8 },
+                { "q9", answers?.Answer9 },
+                { "q10", answers?.Answer10 }
+            };
+            Session["Step"] = null;
             Session["PersonalityTestAnswers"] = null;
             return View();
         }

@@ -15,7 +15,7 @@
 @if (!isLoggedIn)
 {
     <p>⚠️ A teszt kitöltéséhez be kell jelentkezned.</p>
-    <button id="customLoginTrigger" class="btn btn-primary btn-lg">Bejelentkezek</button>
+    <button id="MyLoginButton" class="btn btn-primary btn-lg">Bejelentkezek</button>
 }
 else if (step == 0)
 {
@@ -30,10 +30,9 @@ else if (step == 0)
 else
 {
     <h2>Személyiségteszt</h2>
-    <br />
-    <br />
     if (step == 1)
     {
+        <form></form>
         <form method="post" action="@Url.Action("Index", "PersonalityTest")">
             <input type="hidden" name="step" value="1" />
             <p>1. Mi alapján választod meg az öltözködésedet?</p>
@@ -66,18 +65,24 @@ else
             <label><input type="radio" name="q5" value="C" /> C) Legyen egyedi, akár szokatlan</label><br />
             <label><input type="radio" name="q5" value="D" /> D) Időtlen, klasszikus darab, amit évtizedekig viselek</label>
             <br /><br />
-            <button type="submit" class="btn btn-success">Tovább</button>
+            <button type="submit" class="btn btn-secondary">Tovább ➡️</button>
         </form>
     }
     else if (step == 2)
     {
-        <form method="post" action="@Url.Action("Index", "PersonalityTest")">
+        <form></form>
+        <br />
+        <form method="post" id="visszaForm" action="@Url.Action("Index", "PersonalityTest")">
             <input type="hidden" name="step" value="0" />
-            <button type="submit" class="btn btn-secondary">⬅️ Vissza</button>
+            <input type="hidden" name="q6" id="q6" value="" />
+            <input type="hidden" name="q7" id="q7" value="" />
+            <input type="hidden" name="q8" id="q8" value="" />
+            <input type="hidden" name="q9" id="q9" value="" />
+            <input type="hidden" name="q10" id="q10" value="" />
+            <button type="submit" id="visszaButton" class="btn btn-secondary">⬅️ Vissza</button>
         </form>
         <br />
-        <br />
-        <form method="post" action="@Url.Action("Index", "PersonalityTest")">
+        <form method="post" id="secondForm" action="@Url.Action("Index", "PersonalityTest")">
             <input type="hidden" name="step" value="2" />
             <p>6. Milyen környezetben érzed legjobban magad?</p>
             <label><input type="radio" name="q6" value="A" /> A) Ott, ahol teljesíteni lehet – sportpályán, arénában...</label><br />
@@ -116,7 +121,7 @@ else
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const savedAnswers = @Html.Raw(Json.Encode(ViewBag.Answers));
-
+        //A RADIO-GOMBOK ÚJRA KIVÁLASZTÁSA, HA MÁR VOLT VÁLASZ
         if (savedAnswers) {
             for (const [key, value] of Object.entries(savedAnswers)) {
                 const radio = document.querySelector(`input[name="${key}"][value="${value}"]`);
