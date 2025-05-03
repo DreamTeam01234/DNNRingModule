@@ -105,7 +105,7 @@ namespace Ring.Module.DNNRingModule.Controllers
         public ActionResult ThankYou()
         {
             var answers = Session["PersonalityTestAnswers"] as PersonalityTestAnswer;
-            //Ilyen dictionary-ben kell tárolni a vlaszokat, hogy a ThankYou oldalon könnyen lehessen kiiratni
+            //Ilyen dictionary-ben kell tárolni a válaszokat, hogy a ThankYou oldalon könnyen lehessen kiiratni
             ViewBag.Answers = new Dictionary<string, string>
             {
                 { "q1", answers?.Answer1 },
@@ -123,5 +123,10 @@ namespace Ring.Module.DNNRingModule.Controllers
             Session["PersonalityTestAnswers"] = null;
             return View();
         }
+        public ActionResult PingSession()
+        {
+            return Content("");  // Ahhoz, hogy a session ne törlődjön
+        }
+
     }
 }

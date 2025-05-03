@@ -72,4 +72,9 @@
 
         visszaForm.submit();
     });
+
+    // 5 percenként meghívja ezt a method-ot, így nem törlődik a session
+    setInterval(function () {
+        $.get("/PersonalityTest/PingSession");
+    }, 5 * 60 * 1000);
 });
