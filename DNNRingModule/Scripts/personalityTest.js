@@ -12,9 +12,9 @@
             }
         });
     }
-
     // A RADIO-GOMBOS FORMOKNÁL MINDEN KÉRDÉSRE VAN VÁLASZ?
     const forms = document.querySelectorAll('form[action*="PersonalityTest"]');
+
     forms.forEach(form => {
         form.addEventListener("submit", function (e) {
             // A VISSZA GOMBOT NEM KELL VALIDÁLNI
@@ -23,33 +23,46 @@
             }
 
             const radios = form.querySelectorAll('input[type="radio"]');
-            const questionNames = new Set([...radios].map(r => r.name));
             let isValid = true;
+            const existingErrorMessages = form.querySelectorAll('.error-message');
+            existingErrorMessages.forEach(errorMessage => errorMessage.remove());
+            let firstUnansweredQuestion = null;
 
-            const errorMessage = form.querySelector('.error-message');
-            if (errorMessage) {
-                errorMessage.remove();
-            }
+            radios.forEach(radio => {
+                const questionName = radio.name;
+                const selectedAnswer = form.querySelector(`input[name="${questionName}"]:checked`);
+                const questionTitle = form.querySelector(`#${questionName}`);
 
-            questionNames.forEach(name => {
-                const selectedAnswer = form.querySelector(`input[name="${name}"]:checked`);
                 if (!selectedAnswer) {
                     isValid = false;
+                    const existingError = questionTitle.querySelector('.error-message');
+                    if (!existingError) {
+                        const errorText = document.createElement('span');
+                        errorText.className = 'error-message';
+                        errorText.textContent = ' Válaszolj erre a kérdésre is!'; 
+                        questionTitle.appendChild(errorText);
+                    }
+                    if (!firstUnansweredQuestion) {
+                        firstUnansweredQuestion = questionTitle;
+                    }
                 }
+                radio.addEventListener('change', function () {
+                    const existingError = questionTitle.querySelector('.error-message');
+                    if (existingError) {
+                        existingError.remove();
+                    }
+                });
             });
+
+            if (firstUnansweredQuestion) {
+                firstUnansweredQuestion.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'});
+            }
+            
             if (!isValid) {
                 e.preventDefault();
-                const errorText = document.createElement('span');
-                //EZT MAJD CSS-BEN
-                errorText.className = 'error-message';
-                errorText.style.color = 'red';
-                errorText.style.fontSize = '14px';
-                errorText.textContent = 'Kérlek válaszolj minden kérdésre a folytatáshoz!';
-                form.querySelector('button[type="submit"]').after(errorText);
             }
         });
     });
-
 
     //AMIKOR VISSZALÉPÜNK, ELMENTJÜK A "LEVEGŐBEN LÓGÓ" VÁLASZOKAT A MÁSODIK OLDALRÓL
     document.getElementById('visszaButton').addEventListener('click', function (event) {
