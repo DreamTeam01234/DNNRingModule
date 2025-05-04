@@ -127,6 +127,5 @@ namespace Ring.Module.DNNRingModule.Controllers
         {
             return Content("");  // Ahhoz, hogy a session ne törlődjön
         }
-
     }
 }
