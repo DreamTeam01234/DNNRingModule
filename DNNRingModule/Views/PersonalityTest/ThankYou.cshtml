@@ -8,9 +8,12 @@
 @{
     ClientResourceManager.RegisterStyleSheet(Dnn.DnnPage, "~/DesktopModules/MVC/DNNRingModule/styles.css");
 }
+
+<div class="module-container">
     <p>A válaszaid alapján hamarosan megmutatjuk a hozzád legjobban illő gyűrűket.</p>
 
     <p>A válaszaid: <strong>@string.Join(", ", (ViewBag.Answers as Dictionary<string, string>).Values)</strong></p>
 
 
     <a href="/" class="btn">Vissza a főoldalra</a>
+</div>
