@@ -12,114 +12,116 @@
     var user = ViewBag.User as UserInfo;
     bool isLoggedIn = ViewBag.IsLoggedIn ?? false;
 }
+<div class="module-container">
 
-@if (!isLoggedIn)
-{
-    <p>⚠️ A teszt kitöltéséhez be kell jelentkezned.</p>
-    <button id="MyLoginButton" class="btn btn-primary btn-lg">Bejelentkezek</button>
-}
-else if (step == 0)
-{
-    <h2>💍 Fedezd fel a hozzád illő gyűrűt!</h2>
-    <p>Kedves @user.DisplayName, válaszolj néhány kérdésre, és mi ajánlunk neked egy tökéletes gyűrűt.</p>
-
-    <form method="post" action="@Url.Action("Index", "PersonalityTest")">
-        <input type="hidden" name="step" value="0" />
-        <button type="submit" class="btn btn-primary btn-lg">Kezdjünk!</button>
-    </form>
-}
-else
-{
-    <h2>Személyiségteszt</h2>
-    <br />
-    if (step == 1)
+    @if (!isLoggedIn)
     {
-        <form></form>
-        <form method="post" class="personalityTestForm" action="@Url.Action("Index", "PersonalityTest")">
-            <input type="hidden" name="step" value="1" />
-            <p id="q1" class="q">1. Mi alapján választod meg az öltözködésedet?</p>
-            <label><input type="radio" name="q1" value="A" /> A) Legyen karakteres és tükrözze, hogy céltudatos vagyok</label><br />
-            <label><input type="radio" name="q1" value="B" /> B) Letisztult, modern stílust keresek</label><br />
-            <label><input type="radio" name="q1" value="C" /> C) Fontos, hogy tükrözze az egyéniségem</label><br />
-            <label><input type="radio" name="q1" value="D" /> D) Szeretem a klasszikus, időtálló eleganciát</label>
-            <br /><br />
-            <p id="q2" class="q">2. Mit csinálnál egy szabad hétvégén?</p>
-            <label><input type="radio" name="q2" value="A" /> A) Edzenék, versenyre készülnék, vagy sporteseményt néznék</label><br />
-            <label><input type="radio" name="q2" value="B" /> B) Okos kütyükkel foglalkoznék vagy DIY projekteken dolgoznék</label><br />
-            <label><input type="radio" name="q2" value="C" /> C) Elmerülnék egy fantasy világban vagy filmekben</label><br />
-            <label><input type="radio" name="q2" value="D" /> D) Pihenés, wellness, elegancia és kényeztetés</label>
-            <br /><br />
-            <p id="q3" class="q">3. Milyen ékszereket viselsz leggyakrabban?</p>
-            <label><input type="radio" name="q3" value="A" /> A) Olyan darabot, ami erőt, elért sikert vagy státuszt szimbolizál</label><br />
-            <label><input type="radio" name="q3" value="B" /> B) Minimalista, modern darabokat</label><br />
-            <label><input type="radio" name="q3" value="C" /> C) Egyedi, különleges vagy antik hatásúakat</label><br />
-            <label><input type="radio" name="q3" value="D" /> D) Arany vagy ezüst, klasszikus darabokat</label>
-            <br /><br />
-            <p id="q4" class="q">4. Melyik állítás illik rád legjobban?</p>
-            <label><input type="radio" name="q4" value="A" /> A) Küzdök a céljaimért és szeretem a versenyt</label><br />
-            <label><input type="radio" name="q4" value="B" /> B) Szeretem, ha minden okosan és logikusan működik</label><br />
-            <label><input type="radio" name="q4" value="C" /> C) Hiszek a varázslatban és a különlegességekben</label><br />
-            <label><input type="radio" name="q4" value="D" /> D) Szeretem a luxust és a hagyományokat</label>
-            <br /><br />
-            <p id="q5" class="q">5. Ha gyűrűt választanál, mit vársz tőle?</p>
-            <label><input type="radio" name="q5" value="A" /> A) Képviselje az elért teljesítményemet</label><br />
-            <label><input type="radio" name="q5" value="B" /> B) Legyen okos, mutasson többet mint kinézet</label><br />
-            <label><input type="radio" name="q5" value="C" /> C) Legyen egyedi, akár szokatlan</label><br />
-            <label><input type="radio" name="q5" value="D" /> D) Időtlen, klasszikus darab, amit évtizedekig viselek</label>
-            <br /><br />
-            <button type="submit" class="btn btn-secondary">Tovább ➡️</button>
-        </form>
+        <p>⚠️ A teszt kitöltéséhez be kell jelentkezned.</p>
+        <button id="MyLoginButton" class="btn btn-primary btn-lg">Bejelentkezek</button>
     }
-    else if (step == 2)
+    else if (step == 0)
     {
-        <form></form>
-        <br />
-        <form method="post" id="visszaForm" action="@Url.Action("Index", "PersonalityTest")">
+        <h2>💍 Fedezd fel a hozzád illő gyűrűt!</h2>
+        <p>Kedves @user.DisplayName, válaszolj néhány kérdésre, és mi ajánlunk neked egy tökéletes gyűrűt.</p>
+
+        <form method="post" action="@Url.Action("Index", "PersonalityTest")">
             <input type="hidden" name="step" value="0" />
-            <input type="hidden" name="q6" id="q6" value="" />
-            <input type="hidden" name="q7" id="q7" value="" />
-            <input type="hidden" name="q8" id="q8" value="" />
-            <input type="hidden" name="q9" id="q9" value="" />
-            <input type="hidden" name="q10" id="q10" value="" />
-            <button type="submit" id="visszaButton" class="btn btn-secondary">⬅️ Vissza</button>
-        </form>
-        <br />
-        <form method="post" class="personalityTestForm" id="secondForm" action="@Url.Action("Index", "PersonalityTest")">
-            <input type="hidden" name="step" value="2" />
-            <p id="q6" class="q">6. Milyen környezetben érzed legjobban magad?</p>
-            <label><input type="radio" name="q6" value="A" /> A) Ott, ahol teljesíteni lehet – sportpályán, arénában...</label><br />
-            <label><input type="radio" name="q6" value="B" /> B) Modern, high-tech környezet</label><br />
-            <label><input type="radio" name="q6" value="C" /> C) Mesévilág, filmek, képzelet</label><br />
-            <label><input type="radio" name="q6" value="D" /> D) Elegáns, rendezett, ízléses helyeken</label>
-            <br /><br />
-            <p id="q7" class="q">7. Melyik karakterrel tudsz azonosulni?</p>
-            <label><input type="radio" name="q7" value="A" /> A) Egy bajnokkal, aki diadalra tör</label><br />
-            <label><input type="radio" name="q7" value="B" /> B) Egy techzsenivel</label><br />
-            <label><input type="radio" name="q7" value="C" /> C) Egy mágus vagy harcos a fantasy világból</label><br />
-            <label><input type="radio" name="q7" value="D" /> D) Egy arisztokrata vagy stílusikon</label>
-            <br /><br />
-            <p id="q8" class="q">8. Mit gondolsz a divatról?</p>
-            <label><input type="radio" name="q8" value="A" /> A) A megjelenésem tükrözze, hogy nem adom alább...</label><br />
-            <label><input type="radio" name="q8" value="B" /> B) Praktikus és innovatív kell legyen</label><br />
-            <label><input type="radio" name="q8" value="C" /> C) Önmagam kifejezése</label><br />
-            <label><input type="radio" name="q8" value="D" /> D) A részletek és elegancia mindenek felett</label>
-            <br /><br />
-            <p id="q9" class="q">9. Milyen a munkád vagy hivatásod?</p>
-            <label><input type="radio" name="q9" value="A" /> A) Dinamikus, célorientált és mindig hozni kell az eredményeket</label><br />
-            <label><input type="radio" name="q9" value="B" /> B) Technológiához vagy rendszerekhez kapcsolódó</label><br />
-            <label><input type="radio" name="q9" value="C" /> C) Kreatív, művészeti vagy szabad gondolkodású</label><br />
-            <label><input type="radio" name="q9" value="D" /> D) Klasszikus, üzleti, elegáns közeg</label>
-            <br /><br />
-            <p id="q10" class="q">10. Mi fog meg egy gyűrűben először?</p>
-            <label><input type="radio" name="q10" value="A" /> A) Az, ha erőt sugároz és egy életstílust képvisel</label><br />
-            <label><input type="radio" name="q10" value="B" /> B) Technológiai tudás vagy különlegesség</label><br />
-            <label><input type="radio" name="q10" value="C" /> C) Fantáziadús design</label><br />
-            <label><input type="radio" name="q10" value="D" /> D) Fény, nemesség, elegancia</label>
-            <br /><br />
-            <button type="submit" class="btn btn-success">Teszt befejezése</button>
+            <button type="submit" class="btn btn-primary btn-lg">Kezdjünk!</button>
         </form>
     }
-}
+    else
+    {
+        <h2>Személyiségteszt</h2>
+        <br />
+        if (step == 1)
+        {
+            <form></form>
+            <form method="post" class="personalityTestForm" action="@Url.Action("Index", "PersonalityTest")">
+                <input type="hidden" name="step" value="1" />
+                <p id="q1" class="q">1. Mi alapján választod meg az öltözködésedet?</p>
+                <label><input type="radio" name="q1" value="A" /> A) Legyen karakteres és tükrözze, hogy céltudatos vagyok</label><br />
+                <label><input type="radio" name="q1" value="B" /> B) Letisztult, modern stílust keresek</label><br />
+                <label><input type="radio" name="q1" value="C" /> C) Fontos, hogy tükrözze az egyéniségem</label><br />
+                <label><input type="radio" name="q1" value="D" /> D) Szeretem a klasszikus, időtálló eleganciát</label>
+                <br /><br />
+                <p id="q2" class="q">2. Mit csinálnál egy szabad hétvégén?</p>
+                <label><input type="radio" name="q2" value="A" /> A) Edzenék, versenyre készülnék, vagy sporteseményt néznék</label><br />
+                <label><input type="radio" name="q2" value="B" /> B) Okos kütyükkel foglalkoznék vagy DIY projekteken dolgoznék</label><br />
+                <label><input type="radio" name="q2" value="C" /> C) Elmerülnék egy fantasy világban vagy filmekben</label><br />
+                <label><input type="radio" name="q2" value="D" /> D) Pihenés, wellness, elegancia és kényeztetés</label>
+                <br /><br />
+                <p id="q3" class="q">3. Milyen ékszereket viselsz leggyakrabban?</p>
+                <label><input type="radio" name="q3" value="A" /> A) Olyan darabot, ami erőt, elért sikert vagy státuszt szimbolizál</label><br />
+                <label><input type="radio" name="q3" value="B" /> B) Minimalista, modern darabokat</label><br />
+                <label><input type="radio" name="q3" value="C" /> C) Egyedi, különleges vagy antik hatásúakat</label><br />
+                <label><input type="radio" name="q3" value="D" /> D) Arany vagy ezüst, klasszikus darabokat</label>
+                <br /><br />
+                <p id="q4" class="q">4. Melyik állítás illik rád legjobban?</p>
+                <label><input type="radio" name="q4" value="A" /> A) Küzdök a céljaimért és szeretem a versenyt</label><br />
+                <label><input type="radio" name="q4" value="B" /> B) Szeretem, ha minden okosan és logikusan működik</label><br />
+                <label><input type="radio" name="q4" value="C" /> C) Hiszek a varázslatban és a különlegességekben</label><br />
+                <label><input type="radio" name="q4" value="D" /> D) Szeretem a luxust és a hagyományokat</label>
+                <br /><br />
+                <p id="q5" class="q">5. Ha gyűrűt választanál, mit vársz tőle?</p>
+                <label><input type="radio" name="q5" value="A" /> A) Képviselje az elért teljesítményemet</label><br />
+                <label><input type="radio" name="q5" value="B" /> B) Legyen okos, mutasson többet mint kinézet</label><br />
+                <label><input type="radio" name="q5" value="C" /> C) Legyen egyedi, akár szokatlan</label><br />
+                <label><input type="radio" name="q5" value="D" /> D) Időtlen, klasszikus darab, amit évtizedekig viselek</label>
+                <br /><br />
+                <button type="submit" class="btn btn-secondary">Tovább ➡️</button>
+            </form>
+        }
+        else if (step == 2)
+        {
+            <form></form>
+            <br />
+            <form method="post" id="visszaForm" action="@Url.Action("Index", "PersonalityTest")">
+                <input type="hidden" name="step" value="0" />
+                <input type="hidden" name="q6" id="q6" value="" />
+                <input type="hidden" name="q7" id="q7" value="" />
+                <input type="hidden" name="q8" id="q8" value="" />
+                <input type="hidden" name="q9" id="q9" value="" />
+                <input type="hidden" name="q10" id="q10" value="" />
+                <button type="submit" id="visszaButton" class="btn btn-secondary">⬅️ Vissza</button>
+            </form>
+            <br />
+            <form method="post" class="personalityTestForm" id="secondForm" action="@Url.Action("Index", "PersonalityTest")">
+                <input type="hidden" name="step" value="2" />
+                <p id="q6" class="q">6. Milyen környezetben érzed legjobban magad?</p>
+                <label><input type="radio" name="q6" value="A" /> A) Ott, ahol teljesíteni lehet – sportpályán, arénában...</label><br />
+                <label><input type="radio" name="q6" value="B" /> B) Modern, high-tech környezet</label><br />
+                <label><input type="radio" name="q6" value="C" /> C) Mesévilág, filmek, képzelet</label><br />
+                <label><input type="radio" name="q6" value="D" /> D) Elegáns, rendezett, ízléses helyeken</label>
+                <br /><br />
+                <p id="q7" class="q">7. Melyik karakterrel tudsz azonosulni?</p>
+                <label><input type="radio" name="q7" value="A" /> A) Egy bajnokkal, aki diadalra tör</label><br />
+                <label><input type="radio" name="q7" value="B" /> B) Egy techzsenivel</label><br />
+                <label><input type="radio" name="q7" value="C" /> C) Egy mágus vagy harcos a fantasy világból</label><br />
+                <label><input type="radio" name="q7" value="D" /> D) Egy arisztokrata vagy stílusikon</label>
+                <br /><br />
+                <p id="q8" class="q">8. Mit gondolsz a divatról?</p>
+                <label><input type="radio" name="q8" value="A" /> A) A megjelenésem tükrözze, hogy nem adom alább...</label><br />
+                <label><input type="radio" name="q8" value="B" /> B) Praktikus és innovatív kell legyen</label><br />
+                <label><input type="radio" name="q8" value="C" /> C) Önmagam kifejezése</label><br />
+                <label><input type="radio" name="q8" value="D" /> D) A részletek és elegancia mindenek felett</label>
+                <br /><br />
+                <p id="q9" class="q">9. Milyen a munkád vagy hivatásod?</p>
+                <label><input type="radio" name="q9" value="A" /> A) Dinamikus, célorientált és mindig hozni kell az eredményeket</label><br />
+                <label><input type="radio" name="q9" value="B" /> B) Technológiához vagy rendszerekhez kapcsolódó</label><br />
+                <label><input type="radio" name="q9" value="C" /> C) Kreatív, művészeti vagy szabad gondolkodású</label><br />
+                <label><input type="radio" name="q9" value="D" /> D) Klasszikus, üzleti, elegáns közeg</label>
+                <br /><br />
+                <p id="q10" class="q">10. Mi fog meg egy gyűrűben először?</p>
+                <label><input type="radio" name="q10" value="A" /> A) Az, ha erőt sugároz és egy életstílust képvisel</label><br />
+                <label><input type="radio" name="q10" value="B" /> B) Technológiai tudás vagy különlegesség</label><br />
+                <label><input type="radio" name="q10" value="C" /> C) Fantáziadús design</label><br />
+                <label><input type="radio" name="q10" value="D" /> D) Fény, nemesség, elegancia</label>
+                <br /><br />
+                <button type="submit" class="btn btn-success">Teszt befejezése</button>
+            </form>
+        }
+    }
+</div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const savedAnswers = @Html.Raw(Json.Encode(ViewBag.Answers));
