@@ -10,10 +10,62 @@
 }
 
 <div class="module-container">
-    <p>A válaszaid alapján hamarosan megmutatjuk a hozzád legjobban illő gyűrűket.</p>
-
     <p>A válaszaid: <strong>@string.Join(", ", (ViewBag.Answers as Dictionary<string, string>).Values)</strong></p>
-
-
+    <br />
+    <div id="sportDiv" style="display:none;">
+        <h1>Kalandor 🏆</h1>
+        <p>
+            Te az a típus vagy, aki mindig mozgásban van, keresed az új kihívásokat, és a győzelem íze éltet. A motiváció és eredményesség a mindennapjaid része.
+            Számodra megfelelő például a bajnoki gyűrűk – markáns, karakteres darabok, amelyek egyediséget és sikert tükröznek.
+        </p>
+    </div>
+    <div id="techguruDiv" style="display:none;">
+        <h1>Techguru 🤖</h1>
+        <p>
+            Szereted a technológia minden új vívmányát, a gyűrűd is tudjon valamit! Funkció, forma, innováció – ez vagy te.
+            A számodra megfelelő gyűrűk pélául az érintésérzékeny, aktivitásmérős, okosgyűrűk és az NFC-s megoldások.
+        </p>
+    </div>
+    <div id="alomkeresoDiv" style="display:none;">
+        <h1>Álomkereső 🐉</h1>
+        <p>
+            Egy másik világ lakója vagy, aki imádja a különleges formákat, jelentéseket és mélyebb szimbólumokat.
+            Neked tetszhetnek a fantasy ihletésű gyűrűk, szimbólumokkal, misztikus motívumokkal. Az igazán karakteres darabok.
+        </p>
+    </div>
+    <div id="stiluskiralynoDiv" style="display:none;">
+        <h1>Stíluskirály/királynő 👑</h1>
+        <p>
+            Te az elegancia és kifinomultság megtestesítője vagy. Fontos számodra a megjelenés, a stílus és a részletek harmóniája. Tudod, mit jelent az időtálló ízlés, és szereted, ha megjelenésed sugároz.
+            A te gyűrűid a klasszikus, exkluzív darabok, finom kövekkel vagy letisztult vonalvezetéssel, amik kiemelik az egyéni eleganciád.
+        </p>
+    </div>
     <a href="/" class="btn">Vissza a főoldalra</a>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const answers = @Html.Raw(Json.Encode(ViewBag.Answers));
+
+        if (!answers || Object.keys(answers).length === 0 || Object.values(answers).some(value => !value)) {
+            document.querySelector('.module-container').innerHTML = '<a href="/" class="btn">Vissza a főoldalra</a>';
+            return;
+        }
+        let categoryCount = { 'A': 0, 'B': 0, 'C': 0, 'D': 0 };
+
+        Object.values(answers).forEach(answer => categoryCount[answer]++);
+        const maxCategory = Object.keys(categoryCount).reduce((a, b) => categoryCount[a] > categoryCount[b] ? a : b);
+
+        const categoryDivIds = {
+            'A': 'sportDiv',
+            'B': 'techguruDiv',
+            'C': 'alomkeresoDiv',
+            'D': 'stiluskiralynoDiv'
+        };
+        const selectedDivId = categoryDivIds[maxCategory];
+        const selectedDiv = document.getElementById(selectedDivId);
+
+        if (selectedDiv) {
+            selectedDiv.style.display = 'block';
+        }
+    });
+</script>
