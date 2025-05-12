@@ -50,6 +50,7 @@
             document.querySelector('.module-container').innerHTML = '<a href="/" class="btn">Vissza a főoldalra</a>';
             return;
         }
+
         let categoryCount = { 'A': 0, 'B': 0, 'C': 0, 'D': 0 };
 
         Object.values(answers).forEach(answer => categoryCount[answer]++);
