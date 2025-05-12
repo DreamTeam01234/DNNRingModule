@@ -7,11 +7,15 @@
 
 @{
     ClientResourceManager.RegisterStyleSheet(Dnn.DnnPage, "~/DesktopModules/MVC/DNNRingModule/styles.css");
+    var answers = ViewBag.Answers as Dictionary<string, string>;
+    var categoryLetter = ViewBag.CategoryLetter as string;
 }
 
 <div class="module-container">
+    <a href="/" class="btn">Vissza a főoldalra</a>
     <p>A válaszaid: <strong>@string.Join(", ", (ViewBag.Answers as Dictionary<string, string>).Values)</strong></p>
     <br />
+
     <div id="sportDiv" style="display:none;">
         <h1>Kalandor 🏆</h1>
         <p>
@@ -23,7 +27,7 @@
         <h1>Techguru 🤖</h1>
         <p>
             Te egy igazi techguru vagy! Szereted a technológia minden új vívmányát, a gyűrűd is tudjon valamit! Funkció, forma, innováció – ez vagy te.
-            A számodra megfelelő gyűrűk pélául az érintésérzékeny, aktivitásmérős, okosgyűrűk és az NFC-s megoldások.
+            A számodra megfelelő gyűrűk pélául az érintésérzékeny, aktivitásmérős, high-tech okosgyűrűk és az NFC-s megoldások.
         </p>
     </div>
     <div id="alomkeresoDiv" style="display:none;">
@@ -40,33 +44,28 @@
             A te gyűrűid a klasszikus, exkluzív darabok, finom kövekkel vagy letisztult vonalvezetéssel, amik kiemelik az egyéni eleganciád.
         </p>
     </div>
-    <a href="/" class="btn">Vissza a főoldalra</a>
+
+    <br />
+    <h2>A válaszaid alapján ezeket a gyűrűket ajánljuk:</h2>
 </div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const answers = @Html.Raw(Json.Encode(ViewBag.Answers));
+        const letter = "@categoryLetter";
+        const divMap = {
+            "A": "sportDiv",
+            "B": "techguruDiv",
+            "C": "alomkeresoDiv",
+            "D": "stiluskiralynoDiv"
+        };
+        const selectedDiv = document.getElementById(divMap[letter]);
+        if (selectedDiv) selectedDiv.style.display = "block";
 
+        const answers = @Html.Raw(Json.Encode(ViewBag.Answers ?? new Dictionary<string, string>()));
         if (!answers || Object.keys(answers).length === 0 || Object.values(answers).some(value => !value)) {
             document.querySelector('.module-container').innerHTML = '<a href="/" class="btn">Vissza a főoldalra</a>';
             return;
         }
-
-        let categoryCount = { 'A': 0, 'B': 0, 'C': 0, 'D': 0 };
-
-        Object.values(answers).forEach(answer => categoryCount[answer]++);
-        const maxCategory = Object.keys(categoryCount).reduce((a, b) => categoryCount[a] > categoryCount[b] ? a : b);
-
-        const categoryDivIds = {
-            'A': 'sportDiv',
-            'B': 'techguruDiv',
-            'C': 'alomkeresoDiv',
-            'D': 'stiluskiralynoDiv'
-        };
-        const selectedDivId = categoryDivIds[maxCategory];
-        const selectedDiv = document.getElementById(selectedDivId);
-
-        if (selectedDiv) {
-            selectedDiv.style.display = 'block';
-        }
+        document.body.classList.add("thankyou-page");
     });
 </script>
