@@ -11,6 +11,9 @@ using DotNetNuke.Data;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 
+using Hotcakes.Commerce;
+using Hotcakes.Commerce.Catalog;
+
 namespace Ring.Module.DNNRingModule.Controllers
 {
     public class PersonalityTestController : DnnController
@@ -102,30 +105,81 @@ namespace Ring.Module.DNNRingModule.Controllers
             PersonalityTestManager.Instance.CreatePersonalityTest(answers);
         }
 
+        public ActionResult PingSession()
+        {
+            return Content(""); //Ahhoz, hogy ne törlődjön a session
+        }
+
+
+        //INNENTŐL A THANKYOU OLDALLAL FOGLALKOZUNK
         public ActionResult ThankYou()
         {
             var answers = Session["PersonalityTestAnswers"] as PersonalityTestAnswer;
-            //Ilyen dictionary-ben kell tárolni a válaszokat, hogy a ThankYou oldalon könnyen lehessen kiiratni
-            ViewBag.Answers = new Dictionary<string, string>
-            {
-                { "q1", answers?.Answer1 },
-                { "q2", answers?.Answer2 },
-                { "q3", answers?.Answer3 },
-                { "q4", answers?.Answer4 },
-                { "q5", answers?.Answer5 },
-                { "q6", answers?.Answer6 },
-                { "q7", answers?.Answer7 },
-                { "q8", answers?.Answer8 },
-                { "q9", answers?.Answer9 },
-                { "q10", answers?.Answer10 }
+
+            var all = new[] {
+                answers?.Answer1, answers?.Answer2, answers?.Answer3, answers?.Answer4, answers?.Answer5,
+                answers?.Answer6, answers?.Answer7, answers?.Answer8, answers?.Answer9, answers?.Answer10
             };
+
+            var letter = all.Where(x => !string.IsNullOrEmpty(x))
+                            .GroupBy(x => x)
+                            .OrderByDescending(g => g.Count())
+                            .Select(g => g.Key)
+                            .FirstOrDefault() ?? "A";
+
+            var rewriteUrls = GetRewriteUrlsFromAnswer(letter);
+            UpdateKivalCategoryByRewriteUrls(rewriteUrls);
+
+            ViewBag.CategoryLetter = letter;
+            ViewBag.Answers = Enumerable.Range(1, 10)
+                .ToDictionary(i => $"q{i}", i => (string)answers?.GetType().GetProperty($"Answer{i}")?.GetValue(answers));
+
             Session["Step"] = null;
             Session["PersonalityTestAnswers"] = null;
+
             return View();
         }
-        public ActionResult PingSession()
+
+        private List<string> GetRewriteUrlsFromAnswer(string letter)
         {
-            return Content("");  // Ahhoz, hogy a session ne törlődjön
+            var map = new Dictionary<string, List<string>>
+            {
+                { "A", new List<string> { "sport" } },
+                { "B", new List<string> { "okosgyc5b1rc5b1" } },
+                { "C", new List<string> { "fantc3a1zia" } },
+                { "D", new List<string> { "ezc3bcst", "arany" } } // ezüst + arany
+            };
+            return map.TryGetValue(letter, out var urls) ? urls : new List<string> { "ezc3bcst" };
+        }
+
+        private void UpdateKivalCategoryByRewriteUrls(List<string> rewriteUrls)
+        {
+            var app = HotcakesApplication.Current;
+            var kival = app.CatalogServices.Categories.FindBySlug("kival");
+            if (kival == null) return;
+
+            app.CatalogServices.CategoriesXProducts.DeleteAllForCategory(kival.Bvin);
+
+            var products = new List<Product>();
+
+            foreach (var url in rewriteUrls)
+            {
+                var category = app.CatalogServices.Categories.FindBySlug(url);
+                if (category == null) continue;
+
+                var items = app.CatalogServices.CategoriesXProducts
+                    .FindForCategory(category.Bvin, 1, int.MaxValue)
+                    .Select(x => app.CatalogServices.Products.Find(x.ProductId))
+                    .Where(p => p != null && p.Status == ProductStatus.Active);
+
+                products.AddRange(items);
+            }
+
+            products = products.OrderBy(_ => Guid.NewGuid()).Take(3).ToList();
+            products.ForEach(p =>
+            {
+                app.CatalogServices.CategoriesXProducts.AddProductToCategory(p.Bvin, kival.Bvin);
+            });
         }
     }
 }
