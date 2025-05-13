@@ -24,11 +24,22 @@ button {
     font-size: 22px;
 }
 
-.text-center {
+.test-title {
     text-align: center;
+    color: #6F1A07;
+    font-weight: bold;
+    font-size: 35px;
 }
 
-
+#backtomain {
+    font-size: 15px;
+    text-decoration: none;
+    color: #028bff;
+    transition: box-shadow 0.1s ease;
+}
+#backtomain:active {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
 input[type="radio"] {
     display: none;
 }

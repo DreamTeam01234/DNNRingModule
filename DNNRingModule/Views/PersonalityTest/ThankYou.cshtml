@@ -12,10 +12,10 @@
 }
 
 <div class="module-container">
-    <a href="/" class="btn">Vissza a főoldalra</a>
+    <a href="/" id="backtomain">Vissza a főoldalra</a>
+    <br />
     <p>A válaszaid: <strong>@string.Join(", ", (ViewBag.Answers as Dictionary<string, string>).Values)</strong></p>
     <br />
-
     <div id="sportDiv" style="display:none;">
         <h1>Kalandor 🏆</h1>
         <p>
@@ -47,6 +47,7 @@
 
     <br />
     <h2>A válaszaid alapján ezeket a gyűrűket ajánljuk:</h2>
+    <br />
 </div>
 
 <script>
