@@ -5,12 +5,26 @@
 @using System.Text.RegularExpressions
 @using DotNetNuke.Web.Mvc.Helpers
 
+
 @{
     ClientResourceManager.RegisterScript(Dnn.DnnPage, "~/DesktopModules/MVC/DNNRingModule/Scripts/personalityTest.js");
     ClientResourceManager.RegisterStyleSheet(Dnn.DnnPage, "~/DesktopModules/MVC/DNNRingModule/styles.css");
     int step = ViewBag.Step ?? 0;
     var user = ViewBag.User as UserInfo;
+    var topTypes = ViewBag.TopTypes as string[] ?? new[] { "A", "B" };
     bool isLoggedIn = ViewBag.IsLoggedIn ?? false;
+
+    var answers = ViewBag.Answers;
+    var values = new List<string>();
+    if (answers != null)
+    {
+        for (int i = 1; i <= 10; i++)
+        {
+            var prop = answers.GetType().GetProperty("q" + i);
+            var val = prop != null ? prop.GetValue(answers) as string : null;
+            if (!string.IsNullOrEmpty(val)){ values.Add(val);}
+        }
+    }
 }
 <div class="module-container">
 
@@ -39,34 +53,64 @@
             <form method="post" class="personalityTestForm" action="@Url.Action("Index", "PersonalityTest")">
                 <input type="hidden" name="step" value="1" />
                 <p id="q1" class="q">1. Mi alapján választod meg az öltözködésedet?</p>
-                <label><input type="radio" name="q1" value="A" /> A) Legyen karakteres és tükrözze, hogy céltudatos vagyok</label><br />
-                <label><input type="radio" name="q1" value="B" /> B) Letisztult, modern stílust keresek</label><br />
-                <label><input type="radio" name="q1" value="C" /> C) Fontos, hogy tükrözze az egyéniségem</label><br />
-                <label><input type="radio" name="q1" value="D" /> D) Szeretem a klasszikus, időtálló eleganciát</label>
+                <label><input type="radio" name="q1" value="A" />Legyen karakteres és tükrözze, hogy céltudatos vagyok</label><br />
+                <label><input type="radio" name="q1" value="B" />Letisztult, modern stílust keresek</label><br />
+                <label><input type="radio" name="q1" value="C" />Fontos, hogy tükrözze az egyéniségem</label><br />
+                <label><input type="radio" name="q1" value="D" />Szeretem a klasszikus, időtálló eleganciát</label>
                 <br /><br />
                 <p id="q2" class="q">2. Mit csinálnál egy szabad hétvégén?</p>
-                <label><input type="radio" name="q2" value="A" /> A) Edzenék, versenyre készülnék, vagy sporteseményt néznék</label><br />
-                <label><input type="radio" name="q2" value="B" /> B) Okos kütyükkel foglalkoznék vagy DIY projekteken dolgoznék</label><br />
-                <label><input type="radio" name="q2" value="C" /> C) Elmerülnék egy fantasy világban vagy filmekben</label><br />
-                <label><input type="radio" name="q2" value="D" /> D) Pihenés, wellness, elegancia és kényeztetés</label>
+                <label><input type="radio" name="q2" value="A" />Edzenék, versenyre készülnék, vagy sporteseményt néznék</label><br />
+                <label><input type="radio" name="q2" value="B" />Okos kütyükkel foglalkoznék vagy DIY projekteken dolgoznék</label><br />
+                <label><input type="radio" name="q2" value="C" />Elmerülnék egy fantasy világban vagy filmekben</label><br />
+                <label><input type="radio" name="q2" value="D" />Pihenés, wellness, elegancia és kényeztetés</label>
                 <br /><br />
                 <p id="q3" class="q">3. Milyen ékszereket viselsz leggyakrabban?</p>
-                <label><input type="radio" name="q3" value="A" /> A) Olyan darabot, ami erőt, elért sikert vagy státuszt szimbolizál</label><br />
-                <label><input type="radio" name="q3" value="B" /> B) Minimalista, modern darabokat</label><br />
-                <label><input type="radio" name="q3" value="C" /> C) Egyedi, különleges vagy antik hatásúakat</label><br />
-                <label><input type="radio" name="q3" value="D" /> D) Arany vagy ezüst, klasszikus darabokat</label>
+                <label><input type="radio" name="q3" value="A" />Olyan darabot, ami erőt, elért sikert vagy státuszt szimbolizál</label><br />
+                <label><input type="radio" name="q3" value="B" />Minimalista, modern darabokat</label><br />
+                <label><input type="radio" name="q3" value="C" />Egyedi, különleges vagy antik hatásúakat</label><br />
+                <label><input type="radio" name="q3" value="D" />Arany vagy ezüst, klasszikus darabokat</label>
                 <br /><br />
                 <p id="q4" class="q">4. Melyik állítás illik rád legjobban?</p>
-                <label><input type="radio" name="q4" value="A" /> A) Küzdök a céljaimért és szeretem a versenyt</label><br />
-                <label><input type="radio" name="q4" value="B" /> B) Szeretem, ha minden okosan és logikusan működik</label><br />
-                <label><input type="radio" name="q4" value="C" /> C) Hiszek a varázslatban és a különlegességekben</label><br />
-                <label><input type="radio" name="q4" value="D" /> D) Szeretem a luxust és a hagyományokat</label>
+                <label><input type="radio" name="q4" value="A" />Küzdök a céljaimért és szeretem a versenyt</label><br />
+                <label><input type="radio" name="q4" value="B" />Szeretem, ha minden okosan és logikusan működik</label><br />
+                <label><input type="radio" name="q4" value="C" />Hiszek a varázslatban és a különlegességekben</label><br />
+                <label><input type="radio" name="q4" value="D" />Szeretem a luxust és a hagyományokat</label>
                 <br /><br />
                 <p id="q5" class="q">5. Ha gyűrűt választanál, mit vársz tőle?</p>
-                <label><input type="radio" name="q5" value="A" /> A) Képviselje az elért teljesítményemet</label><br />
-                <label><input type="radio" name="q5" value="B" /> B) Legyen okos, mutasson többet mint kinézet</label><br />
-                <label><input type="radio" name="q5" value="C" /> C) Legyen egyedi, akár szokatlan</label><br />
-                <label><input type="radio" name="q5" value="D" /> D) Időtlen, klasszikus darab, amit évtizedekig viselek</label>
+                <label><input type="radio" name="q5" value="A" />Képviselje az elért teljesítményemet</label><br />
+                <label><input type="radio" name="q5" value="B" />Legyen okos, mutasson többet mint kinézet</label><br />
+                <label><input type="radio" name="q5" value="C" />Legyen egyedi, akár szokatlan</label><br />
+                <label><input type="radio" name="q5" value="D" />Időtlen, klasszikus darab, amit évtizedekig viselek</label>
+                <br /><br />
+                <p id="q6" class="q">6. Milyen környezetben érzed legjobban magad?</p>
+                <label><input type="radio" name="q6" value="A" />Ott, ahol teljesíteni lehet – sportpályán, arénában, csapatban vagy versenyhelyzetben</label><br />
+                <label><input type="radio" name="q6" value="B" />Modern, high-tech környezet</label><br />
+                <label><input type="radio" name="q6" value="C" />Mesévilág, filmek, képzelet</label><br />
+                <label><input type="radio" name="q6" value="D" />Elegáns, rendezett, ízléses helyeken</label>
+                <br /><br />
+                <p id="q7" class="q">7. Melyik karakterrel tudsz azonosulni?</p>
+                <label><input type="radio" name="q7" value="A" />Egy bajnokkal, aki diadalra tör</label><br />
+                <label><input type="radio" name="q7" value="B" />Egy techzsenivel</label><br />
+                <label><input type="radio" name="q7" value="C" />Egy mágus vagy harcos a fantasy világból</label><br />
+                <label><input type="radio" name="q7" value="D" />Egy arisztokrata vagy stílusikon</label>
+                <br /><br />
+                <p id="q8" class="q">8. Mit gondolsz a divatról?</p>
+                <label><input type="radio" name="q8" value="A" />A megjelenésem tükrözze, hogy nem adom alább – tudják rólam, hogy ki vagyok és mit értem el</label><br />
+                <label><input type="radio" name="q8" value="B" />Praktikus és innovatív kell legyen</label><br />
+                <label><input type="radio" name="q8" value="C" />Önmagam kifejezése</label><br />
+                <label><input type="radio" name="q8" value="D" />A részletek és elegancia mindenek felett</label>
+                <br /><br />
+                <p id="q9" class="q">9. Milyen a munkád vagy hivatásod?</p>
+                <label><input type="radio" name="q9" value="A" />Dinamikus, célorientált és mindig hozni kell az eredményeket</label><br />
+                <label><input type="radio" name="q9" value="B" />Technológiához vagy rendszerekhez kapcsolódó</label><br />
+                <label><input type="radio" name="q9" value="C" />Kreatív, művészeti vagy szabad gondolkodású</label><br />
+                <label><input type="radio" name="q9" value="D" />Klasszikus, üzleti, elegáns közeg</label>
+                <br /><br />
+                <p id="q10" class="q">10. Mi fog meg egy gyűrűben először?</p>
+                <label><input type="radio" name="q10" value="A" />Az, ha erőt sugároz és egy életstílust képvisel</label><br />
+                <label><input type="radio" name="q10" value="B" />Technológiai tudás vagy különlegesség</label><br />
+                <label><input type="radio" name="q10" value="C" />Fantáziadús design</label><br />
+                <label><input type="radio" name="q10" value="D" />Fény, nemesség, elegancia</label>
                 <br /><br />
                 <button type="submit" class="btn btn-secondary">Tovább ➡️</button>
             </form>
@@ -76,46 +120,89 @@
             <form></form>
             <form method="post" id="visszaForm" action="@Url.Action("Index", "PersonalityTest")">
                 <input type="hidden" name="step" value="0" />
-                <input type="hidden" name="q6" id="q6" value="" />
-                <input type="hidden" name="q7" id="q7" value="" />
-                <input type="hidden" name="q8" id="q8" value="" />
-                <input type="hidden" name="q9" id="q9" value="" />
-                <input type="hidden" name="q10" id="q10" value="" />
                 <button type="submit" id="visszaButton" class="btn btn-secondary">⬅️ Vissza</button>
             </form>
             <br />
+            <p>Mostantól csak ezekre a kategóriákra fókuszálunk: <strong>@string.Join(", ", topTypes)</strong></p>
+            <p>A válaszaid: <strong>@string.Join(", ", values)</strong></p>
+
             <form method="post" class="personalityTestForm" id="secondForm" action="@Url.Action("Index", "PersonalityTest")">
                 <input type="hidden" name="step" value="2" />
-                <p id="q6" class="q">6. Milyen környezetben érzed legjobban magad?</p>
-                <label><input type="radio" name="q6" value="A" /> A) Ott, ahol teljesíteni lehet – sportpályán, arénában, csapatban vagy versenyhelyzetben</label><br />
-                <label><input type="radio" name="q6" value="B" /> B) Modern, high-tech környezet</label><br />
-                <label><input type="radio" name="q6" value="C" /> C) Mesévilág, filmek, képzelet</label><br />
-                <label><input type="radio" name="q6" value="D" /> D) Elegáns, rendezett, ízléses helyeken</label>
+                <p id="q11" class="q">11. Hogyan képzeled el a tökéletes hétvégét?</p>
+                @if (Array.IndexOf(topTypes, "A") >= 0)
+                {<label><input type="radio" name="q11" value="A" />Verseny, kihívás vagy fizikai aktivitás</label><br />
+                    <label><input type="radio" name="q11" value="A" />Csapatsport vagy célorientált program</label><br />}
+                @if (Array.IndexOf(topTypes, "B") >= 0)
+                {<label><input type="radio" name="q11" value="B" />Tech workshop, okos eszközökkel való kísérletezés</label><br />
+                    <label><input type="radio" name="q11" value="B" />Új dolgok kipróbálása és tanulás</label><br />}
+                @if (Array.IndexOf(topTypes, "C") >= 0)
+                {<label><input type="radio" name="q11" value="C" />Elmerülök egy könyvben, filmben vagy fantáziavilágban</label><br />
+                    <label><input type="radio" name="q11" value="C" />Kreatív elfoglaltság – rajzolás, írás vagy szerepjáték</label><br />}
+                @if (Array.IndexOf(topTypes, "D") >= 0)
+                {<label><input type="radio" name="q11" value="D" />Kellemes vacsora egy exkluzív helyen</label><br />
+                    <label><input type="radio" name="q11" value="D" />Kulturális program, mint egy kiállítás vagy koncert elegáns környezetben</label>}
                 <br /><br />
-                <p id="q7" class="q">7. Melyik karakterrel tudsz azonosulni?</p>
-                <label><input type="radio" name="q7" value="A" /> A) Egy bajnokkal, aki diadalra tör</label><br />
-                <label><input type="radio" name="q7" value="B" /> B) Egy techzsenivel</label><br />
-                <label><input type="radio" name="q7" value="C" /> C) Egy mágus vagy harcos a fantasy világból</label><br />
-                <label><input type="radio" name="q7" value="D" /> D) Egy arisztokrata vagy stílusikon</label>
+
+                <p id="q12" class="q">12. Milyen egy ideális gyűrű a számodra?</p>
+                @if (Array.IndexOf(topTypes, "A") >= 0)
+                {<label><input type="radio" name="q12" value="A" />Markáns, karakteres, erőt sugároz</label><br />
+                    <label><input type="radio" name="q12" value="A" />Története van, amit büszkén viselek</label><br />}
+                @if (Array.IndexOf(topTypes, "B") >= 0)
+                {<label><input type="radio" name="q12" value="B" />Funkcionális és innovatív megoldásokkal ellátott</label><br />
+                    <label><input type="radio" name="q12" value="B" />Letisztult, modern dizájn, ami többet tud, mint látszik</label><br />}
+                @if (Array.IndexOf(topTypes, "C") >= 0)
+                {<label><input type="radio" name="q12" value="C" />Titokzatos szimbólumokat hordoz, amikhez személyes jelentés kapcsolódik</label><br />
+                    <label><input type="radio" name="q12" value="C" />Egyedi formájú, mintha egy másik világból érkezett volna</label><br />}
+                @if (Array.IndexOf(topTypes, "D") >= 0)
+                {<label><input type="radio" name="q12" value="D" />Kifinomult, ízléses dizájn, amiben minden részlet a helyén van</label><br />
+                    <label><input type="radio" name="q12" value="D" />Elegáns, időtálló darab, ami tökéletesen passzol a stílusomhoz</label>}
                 <br /><br />
-                <p id="q8" class="q">8. Mit gondolsz a divatról?</p>
-                <label><input type="radio" name="q8" value="A" /> A) A megjelenésem tükrözze, hogy nem adom alább – tudják rólam, hogy ki vagyok és mit értem el</label><br />
-                <label><input type="radio" name="q8" value="B" /> B) Praktikus és innovatív kell legyen</label><br />
-                <label><input type="radio" name="q8" value="C" /> C) Önmagam kifejezése</label><br />
-                <label><input type="radio" name="q8" value="D" /> D) A részletek és elegancia mindenek felett</label>
+
+                <p id="q13" class="q">13. Milyen élményekre vágysz leginkább?</p>
+                @if (Array.IndexOf(topTypes, "A") >= 0)
+                {<label><input type="radio" name="q13" value="A" />Fizikai kihívásokra, versenyekre, amelyek próbára tesznek</label><br />
+                    <label><input type="radio" name="q13" value="A" />Kalandokra, ahol átléphetem a saját határaimat</label><br />}
+                @if (Array.IndexOf(topTypes, "B") >= 0)
+                {<label><input type="radio" name="q13" value="B" />Interaktív, technológiai élményekre, ahol kipróbálhatok valami újat</label><br />
+                    <label><input type="radio" name="q13" value="B" />Olyan programokra, ahol a modern megoldásoké a főszerep</label><br />}
+                @if (Array.IndexOf(topTypes, "C") >= 0)
+                {<label><input type="radio" name="q13" value="C" />Elmerülni képzeletvilágban, varázslatban</label><br />
+                    <label><input type="radio" name="q13" value="C" />Egy különleges történet részesévé válni</label><br />}
+                @if (Array.IndexOf(topTypes, "D") >= 0)
+                {<label><input type="radio" name="q13" value="D" />Esztétikus, ízléses környezetben pihenni</label><br />
+                    <label><input type="radio" name="q13" value="D" />Stílusos, elegáns programokon részt venni</label>}
                 <br /><br />
-                <p id="q9" class="q">9. Milyen a munkád vagy hivatásod?</p>
-                <label><input type="radio" name="q9" value="A" /> A) Dinamikus, célorientált és mindig hozni kell az eredményeket</label><br />
-                <label><input type="radio" name="q9" value="B" /> B) Technológiához vagy rendszerekhez kapcsolódó</label><br />
-                <label><input type="radio" name="q9" value="C" /> C) Kreatív, művészeti vagy szabad gondolkodású</label><br />
-                <label><input type="radio" name="q9" value="D" /> D) Klasszikus, üzleti, elegáns közeg</label>
+
+                <p id="q14" class="q">14. Milyen ajándék tetszene a legjobban?</p>
+                @if (Array.IndexOf(topTypes, "A") >= 0)
+                {<label><input type="radio" name="q14" value="A" />Egy sportteljesítményhez kötődő ereklye vagy emlékgyűrű</label><br />
+                    <label><input type="radio" name="q14" value="A" />Egy motiváló idézettel ellátott erőt sugárzó kiegészítő</label><br />}
+                @if (Array.IndexOf(topTypes, "B") >= 0)
+                {<label><input type="radio" name="q14" value="B" />Egy modern, innovatív okosgyűrű vagy kütyü</label><br />
+                    <label><input type="radio" name="q14" value="B" />Egy technikai újdonság, ami megkönnyíti a mindennapokat</label><br />}
+                @if (Array.IndexOf(topTypes, "C") >= 0)
+                {<label><input type="radio" name="q14" value="C" />Egy saját történethez kapcsolódó medál vagy gyűrű</label><br />
+                    <label><input type="radio" name="q14" value="C" />Egy kézzel készült, szimbolikus tárgy</label><br />}
+                @if (Array.IndexOf(topTypes, "D") >= 0)
+                {<label><input type="radio" name="q14" value="D" />Egy finom arany vagy ezüst gyűrű, elegáns csomagolásban</label><br />
+                    <label><input type="radio" name="q14" value="D" />Egy exkluzív, ízléses parfüm vagy kiegészítő</label>}
                 <br /><br />
-                <p id="q10" class="q">10. Mi fog meg egy gyűrűben először?</p>
-                <label><input type="radio" name="q10" value="A" /> A) Az, ha erőt sugároz és egy életstílust képvisel</label><br />
-                <label><input type="radio" name="q10" value="B" /> B) Technológiai tudás vagy különlegesség</label><br />
-                <label><input type="radio" name="q10" value="C" /> C) Fantáziadús design</label><br />
-                <label><input type="radio" name="q10" value="D" /> D) Fény, nemesség, elegancia</label>
+
+                <p id="q15" class="q">15. Milyen típusú filmek vagy könyvek kötnek le?</p>
+                @if (Array.IndexOf(topTypes, "A") >= 0)
+                {<label><input type="radio" name="q15" value="A" />Motiváló sportfilmek, élettörténetek, sikersztorik</label><br />
+                    <label><input type="radio" name="q15" value="A" />Kalandfilmek, ahol a hős legyőzi az akadályokat</label><br />}
+                @if (Array.IndexOf(topTypes, "B") >= 0)
+                {<label><input type="radio" name="q15" value="B" />Sci-fi, jövőbe tekintő történetek, technológiai témák</label><br />
+                    <label><input type="radio" name="q15" value="B" />Dokumentumfilmek az innovációról és tudományos felfedezésekről</label><br />}
+                @if (Array.IndexOf(topTypes, "C") >= 0)
+                {<label><input type="radio" name="q15" value="C" />Fantasy, mitológia, mágikus történetek</label><br />
+                    <label><input type="radio" name="q15" value="C" />Képzeletbeli világok, kalandok</label><br />}
+                @if (Array.IndexOf(topTypes, "D") >= 0)
+                {<label><input type="radio" name="q15" value="D" />Klasszikus irodalom, történelmi filmek, elegáns hangulat</label><br />
+                    <label><input type="radio" name="q15" value="D" />Esztétikus képi világú művészfilmek</label>}
                 <br /><br />
+
                 <button type="submit" class="btn btn-success">Teszt befejezése</button>
             </form>
         }

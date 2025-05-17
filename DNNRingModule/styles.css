@@ -35,11 +35,14 @@ button {
     font-size: 15px;
     text-decoration: none;
     color: #028bff;
+    padding: 8px 16px;
     transition: box-shadow 0.1s ease;
 }
+
 #backtomain:active {
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
+
 input[type="radio"] {
     display: none;
 }

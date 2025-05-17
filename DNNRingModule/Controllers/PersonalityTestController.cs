@@ -24,6 +24,7 @@ namespace Ring.Module.DNNRingModule.Controllers
             ViewBag.User = UserController.Instance.GetCurrentUserInfo();
             ViewBag.IsLoggedIn = ViewBag.User != null && ViewBag.User.UserID > 0;
             ViewBag.Step = (int?)Session["Step"] ?? 0;
+            ViewBag.TopTypes = Session["TopTypes"] as string[] ?? new[] { "A", "B" };
 
             var answers = Session["PersonalityTestAnswers"] as PersonalityTestAnswer;
             if (answers != null)
@@ -39,7 +40,12 @@ namespace Ring.Module.DNNRingModule.Controllers
                     q7 = answers?.Answer7,
                     q8 = answers?.Answer8,
                     q9 = answers?.Answer9,
-                    q10 = answers?.Answer10
+                    q10 = answers?.Answer10,
+                    q11 = answers?.Answer11,
+                    q12 = answers?.Answer12,
+                    q13 = answers?.Answer13,
+                    q14 = answers?.Answer14,
+                    q15 = answers?.Answer15
                 };
             }
             return View();
@@ -61,30 +67,40 @@ namespace Ring.Module.DNNRingModule.Controllers
                 };
             }
 
-            // VISSZA
-            if (step == 0)
-            {
-                answers.Answer6 = form["q6"];
-                answers.Answer7 = form["q7"];
-                answers.Answer8 = form["q8"];
-                answers.Answer9 = form["q9"];
-                answers.Answer10 = form["q10"];
-            }
-            else if (step == 1)
+            if (step == 1)
             {
                 answers.Answer1 = form["q1"];
                 answers.Answer2 = form["q2"];
                 answers.Answer3 = form["q3"];
                 answers.Answer4 = form["q4"];
                 answers.Answer5 = form["q5"];
-            }
-            else if (step == 2)
-            {
                 answers.Answer6 = form["q6"];
                 answers.Answer7 = form["q7"];
                 answers.Answer8 = form["q8"];
                 answers.Answer9 = form["q9"];
                 answers.Answer10 = form["q10"];
+
+                var types = new[] {
+                    answers.Answer1, answers.Answer2, answers.Answer3, answers.Answer4, answers.Answer5,
+                    answers.Answer6, answers.Answer7, answers.Answer8, answers.Answer9, answers.Answer10
+                };
+                var topTypes = types
+                    .Where(x => !string.IsNullOrEmpty(x))
+                    .GroupBy(x => x)
+                    .OrderByDescending(g => g.Count())
+                    .Take(2)
+                    .Select(g => g.Key)
+                    .ToArray();
+
+                Session["TopTypes"] = topTypes;
+            }
+            else if (step == 2)
+            {
+                answers.Answer11 = form["q11"];
+                answers.Answer12 = form["q12"];
+                answers.Answer13 = form["q13"];
+                answers.Answer14 = form["q14"];
+                answers.Answer15 = form["q15"];
             }
 
             Session["PersonalityTestAnswers"] = answers;
@@ -117,21 +133,20 @@ namespace Ring.Module.DNNRingModule.Controllers
             var answers = Session["PersonalityTestAnswers"] as PersonalityTestAnswer;
 
             var all = new[] {
-                answers?.Answer1, answers?.Answer2, answers?.Answer3, answers?.Answer4, answers?.Answer5,
-                answers?.Answer6, answers?.Answer7, answers?.Answer8, answers?.Answer9, answers?.Answer10
+                answers?.Answer11, answers?.Answer12, answers?.Answer13, answers?.Answer14, answers?.Answer15,
             };
 
             var letter = all.Where(x => !string.IsNullOrEmpty(x))
                             .GroupBy(x => x)
                             .OrderByDescending(g => g.Count())
                             .Select(g => g.Key)
-                            .FirstOrDefault() ?? "A";
+                            .FirstOrDefault() ?? "D";
 
             var rewriteUrls = GetRewriteUrlsFromAnswer(letter);
             UpdateKivalCategoryByRewriteUrls(rewriteUrls);
 
             ViewBag.CategoryLetter = letter;
-            ViewBag.Answers = Enumerable.Range(1, 10)
+            ViewBag.Answers = Enumerable.Range(1, 15)
                 .ToDictionary(i => $"q{i}", i => (string)answers?.GetType().GetProperty($"Answer{i}")?.GetValue(answers));
 
             Session["Step"] = null;

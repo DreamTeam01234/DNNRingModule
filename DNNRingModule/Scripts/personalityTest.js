@@ -78,27 +78,6 @@
         });
     });
 
-    //AMIKOR VISSZALÉPÜNK, ELMENTJÜK A "LEVEGŐBEN LÓGÓ" VÁLASZOKAT A MÁSODIK OLDALRÓL
-    document.getElementById('visszaButton').addEventListener('click', function (event) {
-        event.preventDefault();
-        var secondForm = document.getElementById('secondForm');
-        var visszaForm = document.getElementById('visszaForm');
-        var answers = {
-            q6: secondForm.querySelector('input[name="q6"]:checked') ? secondForm.querySelector('input[name="q6"]:checked').value : '',
-            q7: secondForm.querySelector('input[name="q7"]:checked') ? secondForm.querySelector('input[name="q7"]:checked').value : '',
-            q8: secondForm.querySelector('input[name="q8"]:checked') ? secondForm.querySelector('input[name="q8"]:checked').value : '',
-            q9: secondForm.querySelector('input[name="q9"]:checked') ? secondForm.querySelector('input[name="q9"]:checked').value : '',
-            q10: secondForm.querySelector('input[name="q10"]:checked') ? secondForm.querySelector('input[name="q10"]:checked').value : ''
-        };
-
-        visszaForm.querySelector('[name="q6"]').value = answers.q6;
-        visszaForm.querySelector('[name="q7"]').value = answers.q7;
-        visszaForm.querySelector('[name="q8"]').value = answers.q8;
-        visszaForm.querySelector('[name="q9"]').value = answers.q9;
-        visszaForm.querySelector('[name="q10"]').value = answers.q10;
-
-        visszaForm.submit();
-    });
 
     // 10 percenként meghívja ezt a method-ot, így nem törlődik a session
     setInterval(function () {
