@@ -27,7 +27,7 @@
         });
     });
 
-    // A FORMOKNÁL MINDEN KÉRDÉSRE VAN VÁLASZ?
+    // FORMOKNÁL MINDEN KÉRDÉSRE VAN VÁLASZ?
     const forms = document.querySelectorAll('.personalityTestForm');
 
     forms.forEach(form => {
