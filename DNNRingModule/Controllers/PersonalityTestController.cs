@@ -127,7 +127,7 @@ namespace Ring.Module.DNNRingModule.Controllers
         }
 
 
-        //INNENTŐL A THANKYOU OLDALLAL FOGLALKOZUNK
+        //INNENTŐL A THANKYOU-VAL FOGLALKOZUNK
         public ActionResult ThankYou()
         {
             var answers = Session["PersonalityTestAnswers"] as PersonalityTestAnswer;
