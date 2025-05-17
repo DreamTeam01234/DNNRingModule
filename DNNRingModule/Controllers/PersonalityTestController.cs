@@ -91,7 +91,16 @@ namespace Ring.Module.DNNRingModule.Controllers
                     .Take(2)
                     .Select(g => g.Key)
                     .ToArray();
-
+                
+                if (topTypes.Length == 1)
+                {
+                    var fallback = new[] { "A", "B", "C", "D" }
+                        .Where(t => t != topTypes[0])
+                        .OrderBy(_ => Guid.NewGuid())
+                        .First();
+                    topTypes = new[] { topTypes[0], fallback };
+                    // Véletlenszerűen választunk egy plusz kategóriát, ha minden kérdésre ugyanaz a kategória a válasz
+                }
                 Session["TopTypes"] = topTypes;
             }
             else if (step == 2)
