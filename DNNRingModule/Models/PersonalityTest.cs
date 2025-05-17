@@ -24,5 +24,10 @@ namespace Ring.Module.DNNRingModule.Models
         public string Answer8 { get; set; }
         public string Answer9 { get; set; }
         public string Answer10 { get; set; }
+        public string Answer11 { get; set; }
+        public string Answer12 { get; set; }
+        public string Answer13 { get; set; }
+        public string Answer14 { get; set; }
+        public string Answer15 { get; set; }
     }
 }
