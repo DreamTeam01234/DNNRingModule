@@ -31,7 +31,7 @@ CREATE TABLE {databaseOwner}{objectQualifier}PersonalityTest
     Answer12 NVARCHAR(10),
     Answer13 NVARCHAR(10),
     Answer14 NVARCHAR(10),
-    Answer16 NVARCHAR(10)
+    Answer15 NVARCHAR(10)
     )  ON [PRIMARY]
 GO
 
