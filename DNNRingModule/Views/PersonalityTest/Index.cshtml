@@ -123,8 +123,8 @@
                 <button type="submit" id="visszaButton" class="btn btn-secondary">⬅️ Vissza</button>
             </form>
             <br />
-            <p>Mostantól csak ezekre a kategóriákra fókuszálunk: <strong>@string.Join(", ", topTypes)</strong></p>
-            <p>A válaszaid: <strong>@string.Join(", ", values)</strong></p>
+            <!--DEBUG<p>Mostantól csak ezekre a kategóriákra fókuszálunk: <strong>@string.Join(", ", topTypes)</strong></p>
+            <p>A válaszaid: <strong>@string.Join(", ", values)</strong></p>-->
 
             <form method="post" class="personalityTestForm" id="secondForm" action="@Url.Action("Index", "PersonalityTest")">
                 <input type="hidden" name="step" value="2" />
